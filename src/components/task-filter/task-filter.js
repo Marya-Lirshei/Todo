@@ -1,15 +1,19 @@
 import "./task-filter.css";
-const TaskFilter = () => {
+const TaskFilter = ({onToggle, activeTask, completedTask }) => {
   return (
     <ul className="filters">
       <li>
         <button className="selected">All</button>
       </li>
       <li>
-        <button>Active</button>
+        <button
+       onClick={activeTask}
+        >Active</button>
       </li>
       <li>
-        <button>Completed</button>
+        <button
+        onClick={completedTask}
+        >Completed</button>
       </li>
     </ul>
   );
