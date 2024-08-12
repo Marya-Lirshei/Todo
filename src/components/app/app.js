@@ -7,9 +7,27 @@ import Footer from "../footer/footer";
 // console.log("hee");
 
 export default class App extends Component {
+
+  filter(items, filter) {
+    switch (filter) {
+      case "all":
+        return items;
+      case "active":
+        return items.filter((item) => !item.done);
+      case "done":
+        return items.filter((item) => item.done);
+      default:
+        return items;
+    }
+  }
+  
   state = {
-   
+    todoData: [
+ 
+    ],
+    filter: "",
   };
+
 
   deleteItem = (id) => {
     this.setState(({ todoData }) => ({
@@ -71,41 +89,51 @@ export default class App extends Component {
     // });
   };
 
-  activeTask = () => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.filter((el) => {
-        console.log(el);
-        return !el.done;
-      }),
-    }));
+  onFilterChange = (filter) => {
+    this.setState({ filter });
   };
 
+  // activeTask = () => {
+  //   this.setState(({ todoData }) => ({
+  //     todoData: todoData.filter((el) => {
+  //       console.log(el);
+  //       return !el.done;
+  //     }),
+  //   }));
+  // };
 
-  completedTask = () => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.filter((el) => {
-        console.log(el);
-        return el.done;
-      }),
-    }));
-  }
+
+  // completedTask = () => {
+  //   this.setState(({ todoData }) => ({
+  //     todoData: todoData.filter((el) => {
+  //       console.log(el);
+  //       return el.done;
+  //     }),
+  //   }));
+  // }
 
   render() {
+
+    const { todoData, filter } = this.state;
+
+    const unCompletedCount = todoData.filter((el) => !el.done).length;
     console.log("Текущ задачи:", this.state.todoData);
     return (
       <section className="todo-app">
         <NewTaskForm onAddTask={this.addTask} />
         <section className="main">
           <TaskList
-            todos={this.state.todoData}
+            todos={todoData}
             onDeleted={this.deleteItem}
             onToggle={this.toggleTask}
           />
           <Footer
-            todoCount={this.state.todoData.length}
+            filter={filter}
+            todoCount={unCompletedCount}
             onClick={this.deleteCompleted}
-            activeTask={this.activeTask}
-            completedTask = {this.completedTask}
+            onFilterChange={this.onFilterChange}
+            // activeTask={this.activeTask}
+            // completedTask = {this.completedTask}
             onToggle={this.toggleTask}
           />
         </section>
