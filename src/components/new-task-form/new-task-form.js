@@ -38,7 +38,7 @@ export default class NewTaskForm extends Component{
           <h1>todos</h1>
           <input
             className="new-todo"
-            placeholder="Whahgjt needs to be done?"
+            placeholder="What needs to be done?"
             onChange={this.onLableChange}
             value={label}
           />

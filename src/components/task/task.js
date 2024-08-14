@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatDistanceToNowStrict } from "date-fns";
 import "./task.css";
 
 function Task({ label, onDeleted, onToggleDone, done, taskId, date }) {
@@ -18,9 +19,9 @@ function Task({ label, onDeleted, onToggleDone, done, taskId, date }) {
         />
         <label htmlFor={`todo-${taskId}`}>
           <span className="description">{label}</span>
-       {/*    <span className="created">{`created ${formatDistanceToNow(
+          <span className="created">{`created ${formatDistanceToNowStrict(
             date
-          )} ago`}</span> */}
+          )} ago`}</span>
         </label>
         <button type="button" className="icon icon-edit" />
         <button

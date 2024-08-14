@@ -9,7 +9,7 @@ import "./app.css";
 
 export default class App extends Component {
   
-  static filter(items, filter) {
+  static filterData(items, filter) {
     switch (filter) {
       case "all":
         return items;
@@ -101,7 +101,7 @@ export default class App extends Component {
   render() {
     const { todoData, filter } = this.state;
 
-    const visibleItems = App.filter(todoData, filter);
+    const visibleItems = App.filterData(todoData, filter);
     // функция для подсчета выполненных задач
     // const doneCount = this.state.todoData.filter((el) => el.done.length);
     // const todoCount = this.state.todoData.length - doneCount;
