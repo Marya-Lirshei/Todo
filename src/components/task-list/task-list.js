@@ -1,23 +1,22 @@
 import Task from "../task/task.js";
 import "./task-list.css";
 
-const TaskList = ({ todos, onDeleted, onToggle }) => {
-  //   console.log("todos: ", todos);
-  return (
-    <ul className="todo-list">
-      {todos.map((el) => {
-        const { id, ...props } = el;
-        return <Task key={id} {...props} 
-        onDeleted={() => onDeleted(id)}
-        onToggle={() => onToggle(id)}/>;
-      })}
-    </ul>
-    //   <ul className="todo-list">
-    //   {todos.map(({ id, ...props }) => (
-    //     <Task key={id} {...props} onDeleted={() => onDeleted(id)} />
-    //   ))}
-    // </ul>
-  );
-};
+function TaskList({ todos, onDeleted, onToggleDone }) {
+  const elements = todos.map((item) => (
+    <Task
+      key={item.id}
+      label={item.label}
+      done={item.done}
+      change={item.change}
+      date={item.date}
+      onDeleted={() => {
+        onDeleted(item.id);
+      }}
+      onToggleDone={() => onToggleDone(item.id)}
+      taskId={item.id}
+    />
+  ));
+  return <ul className="todo-list">{elements}</ul>;
+}
 
 export default TaskList;

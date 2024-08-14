@@ -4,34 +4,46 @@ import "./new-task-form.css"
 
 export default class NewTaskForm extends Component{
 
-  state={
-    newTask: ""
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      label: "",
+    };
   }
 
-  handleInputChange =(event)=>{
-      this.setState({ newTask: event.target.value})
-  }
+  onLableChange = (event) => {
+    this.setState({
+      label: event.target.value,
+    });
+  };
 
-  handleKeyDown =(event)=>{
-    if(event.key==="Enter"){
-      this.props.onAddTask(this.state.newTask)
-      this.setState({newTask: ""})
-    }
-  }
+  onSubmit = (event) => {
+    event.preventDefault();
+    // this.props.onItemAdd(this.state.label);
+    const { onItemAdd } = this.props;
+    const { label } = this.state;
+    onItemAdd(label);
+    this.setState({
+      label: "",
+    });
+  };
 
-  render(){
+  render() {
+    const { label } = this.state;
+
     return (
-        <header className="header">
-        <h1>Todos</h1>
-        <input
-          className="new-todo"
-          placeholder="What needs to be done?"
-          autoFocus
-          value={this.state.newTask}
-          onChange={this.handleInputChange}
-          onKeyDown={this.handleKeyDown}
-        ></input>
+      <header className="header">
+        <form onSubmit={this.onSubmit}>
+          <h1>todos</h1>
+          <input
+            className="new-todo"
+            placeholder="Whahgjt needs to be done?"
+            onChange={this.onLableChange}
+            value={label}
+          />
+        </form>
       </header>
-    )
+    );
   }
 }

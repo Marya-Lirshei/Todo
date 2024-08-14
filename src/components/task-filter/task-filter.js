@@ -6,49 +6,25 @@ export default class TaskFilter extends Component {
     { name: "active", label: "Active" },
     { name: "done", label: "Completed" },
   ];
+
   render() {
-    // const { filter, onFilterChange } = this.props;
-    return (
-      <ul className="filters">
-        <li>
-          <button className="selected">All</button>
-        </li>
-        <li>
-          <button
-         /* onClick={activeTask} */
-          >Active</button>
-        </li>
-        <li>
-          <button
-          /* onClick={completedTask} */
-          >Completed</button>
-        </li>
-      </ul>
-    );
+    const { filter, onFilterChange } = this.props;
+    const buttons = this.buttons.map(({ name, label }) => {
+      const isActive = filter === name;
+      const clazz = isActive ? "selected" : "button";
+      return (
+        <button
+          type="button"
+          key={name}
+          className={`${clazz}`}
+          onClick={() => onFilterChange(name)}
+        >
+          {label}
+        </button>
+      );
+    });
+
+    return <div className="filters">{buttons}</div>;
   }
-
-//   const buttons = this.buttons.map(({ name, label }) => {
-//     const isActive = filter === name;
-//     const clazz = isActive ? "selected" : "button";
-//     return (
-//       <button
-//         type="button"
-//         key={name}
-//         className={`${clazz}`}
-//         onClick={() => onFilterChange(name)}
-//       >
-//         {label}
-//       </button>
-//     );
-//   });
-
-//   return <div className="filters">{buttons}</div>;
-// }
-
 }
-  
-  
-  
-
-
 

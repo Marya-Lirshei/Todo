@@ -2,7 +2,7 @@
     background-color: aquamarine;
 } */
 
-.todo-app input::-webkit-input-placeholder {
+/* .todo-app input::-webkit-input-placeholder {
 	font-style: italic;
 	font-weight: 300;
 	color: rgba(0, 0, 0, 0.4);
@@ -49,7 +49,7 @@
 	box-sizing: border-box;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
+} */
 
 .new-todo {
 	padding: 16px 16px 16px 60px;

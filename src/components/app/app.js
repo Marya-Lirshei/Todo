@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import "./app.css";
+
 import NewTaskForm from "../new-task-form/new-task-form";
 import TaskList from "../task-list/task-list";
 import Footer from "../footer/footer";
 
+import "./app.css";
 // console.log("hee");
 
 export default class App extends Component {
-
-  filter(items, filter) {
+  
+  static filter(items, filter) {
     switch (filter) {
       case "all":
         return items;
@@ -20,121 +21,107 @@ export default class App extends Component {
         return items;
     }
   }
-  
-  state = {
-    todoData: [
- 
-    ],
-    filter: "",
-  };
 
-
-  deleteItem = (id) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.filter((el) => el.id !== id),
-    }));
-  };
-
-  addTask = (label) => {
-    const newTask = {
+  static createTodoItem(label, id) {
+    return {
       label,
       done: false,
-      id: Date.now(),
+      id,
+      date: new Date(),
     };
-    this.setState(({ todoData }) => ({
-      todoData: [...todoData, newTask],
-    }));
+  }
 
-    // this.setState(({ todoData }) => {
-    //   const updatedTodoData = [...todoData, newTask];
-    //   console.log('Добавленная задача:', newTask);
-    //   return { todoData: updatedTodoData };
-    // });
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      todoData: [
+        App.createTodoItem("Drink Coffee", 11),
+        App.createTodoItem("Make Awesome App", 22),
+        App.createTodoItem("Have a lunch", 33),
+      ],
+
+      filter: "",
+    };
+  }
+
+  deleteItem = (id) => {
+    this.setState(({ todoData }) => {
+      const idx = todoData.findIndex((el) => el.id === id);
+      const [...copyArray] = todoData;
+      copyArray.splice(idx, 1);
+      return {
+        todoData: copyArray,
+      };
+    });
   };
 
-  toggleTask = (id) => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task
-      ),
-    }));
+  addItem = (text) => {
+    const newItem = App.createTodoItem(text, Number(new Date()));
 
-    // this.setState(({ todoData }) => {
-    //   const updatedTodoData = todoData.map((task) => {
-    //     if (task.id === id) {
-    //       console.log('Переключение задачи:', task); // Логируем задачу перед переключением
-    //       return { ...task, done: !task.done };
-    //     }
-    //     return task;
-    //   });
-    //   return { todoData: updatedTodoData };
-    // });
+    this.setState(({ todoData }) => {
+      const [...copyArray] = todoData;
+      copyArray.push(newItem);
+      return {
+        todoData: copyArray,
+      };
+    });
   };
 
-  deleteCompleted = () => {
-    this.setState(({ todoData }) => ({
-      todoData: todoData.filter((el) => {
-        console.log(el);
-        return !el.done;
-      }),
-    }));
+  onToggleDone = (id) => {
+    this.setState(({ todoData }) => {
+      const idx = todoData.findIndex((el) => el.id === id);
 
-    // this.setState(({ todoData }) => {
-    //   const filteredTodoData = todoData.filter((el) => {
-    //     console.log('Проверка задачи на удаление:', el); // Логируем каждую задачу
-    //     return !el.done; // Оставляем только невыполненные задачи
-    //   });
-    //   console.log('Оставшиеся задачи после удаления:', filteredTodoData); // Логируем оставшиеся задачи
-    //   return { todoData: filteredTodoData };
-    // });
+      const oldItem = todoData[idx];
+      const newItem = { ...oldItem, done: !oldItem.done };
+      const newArray = [
+        ...todoData.slice(0, idx),
+        newItem,
+        ...todoData.slice(idx + 1),
+      ];
+      return {
+        todoData: newArray,
+      };
+    });
   };
 
   onFilterChange = (filter) => {
     this.setState({ filter });
   };
 
-  // activeTask = () => {
-  //   this.setState(({ todoData }) => ({
-  //     todoData: todoData.filter((el) => {
-  //       console.log(el);
-  //       return !el.done;
-  //     }),
-  //   }));
-  // };
-
-
-  // completedTask = () => {
-  //   this.setState(({ todoData }) => ({
-  //     todoData: todoData.filter((el) => {
-  //       console.log(el);
-  //       return el.done;
-  //     }),
-  //   }));
-  // }
+  clearTask = () => {
+    this.setState(({ todoData }) => {
+      const idx = todoData.filter((item) => !item.done);
+      return {
+        todoData: idx,
+      };
+    });
+  };
 
   render() {
-
     const { todoData, filter } = this.state;
 
+    const visibleItems = App.filter(todoData, filter);
+    // функция для подсчета выполненных задач
+    // const doneCount = this.state.todoData.filter((el) => el.done.length);
+    // const todoCount = this.state.todoData.length - doneCount;
     const unCompletedCount = todoData.filter((el) => !el.done).length;
-    console.log("Текущ задачи:", this.state.todoData);
+
     return (
-      <section className="todo-app">
-        <NewTaskForm onAddTask={this.addTask} />
+      <section className="todoapp">
+        <NewTaskForm onItemAdd={this.addItem} />
         <section className="main">
           <TaskList
-            todos={todoData}
+            todos={visibleItems}
             onDeleted={this.deleteItem}
-            onToggle={this.toggleTask}
+            onToggleDone={this.onToggleDone}
+            onToggleChange={this.onToggleChange}
           />
           <Footer
             filter={filter}
-            todoCount={unCompletedCount}
-            onClick={this.deleteCompleted}
             onFilterChange={this.onFilterChange}
-            // activeTask={this.activeTask}
-            // completedTask = {this.completedTask}
-            onToggle={this.toggleTask}
+            clearTaskMy={this.clearTask}
+            leftItems={unCompletedCount}
           />
         </section>
       </section>
