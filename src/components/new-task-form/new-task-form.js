@@ -12,20 +12,18 @@ export default class NewTaskForm extends Component{
     };
   }
 
-  onLableChange = (event) => {
+  onSubmit = (event) => {
+    event.preventDefault();
+    const { addItem } = this.props;
+    addItem(this.state.label);
     this.setState({
-      label: event.target.value,
+      label: "",
     });
   };
 
-  onSubmit = (event) => {
-    event.preventDefault();
-    // this.props.onItemAdd(this.state.label);
-    const { onItemAdd } = this.props;
-    const { label } = this.state;
-    onItemAdd(label);
+  onLableChange = (event) => {
     this.setState({
-      label: "",
+      label: event.target.value,
     });
   };
 

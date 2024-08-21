@@ -1,50 +1,89 @@
 import React from 'react';
 import { formatDistanceToNowStrict } from "date-fns";
 import "./task.css";
+import PropTypes from "prop-types";
 
-function Task({ label, onDeleted, onToggleDone, done, taskId, date }) {
-  let nameClass = "";
-  if (done) {
-    nameClass += "completed";
+class Task extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditMode: false,
+      text: props.label,
+    };
   }
-  return (
-    <li className={nameClass}>
-      <div className="view">
+
+  onEditClick = () => {
+    // стейт принимается для того, если вдруг операция асинхронная, чтобы было окончательное значение стейта + чтобы можно было переключать с true/false
+    this.setState((state) => ({
+      isEditMode: !state.isEditMode,
+    }));
+  };
+
+  render() {
+    const { isEditMode, text } = this.state;
+    const { date, onDeleted, onToggleDone, done } = this.props;
+
+    let classStyle = "";
+    if (done === true) {
+      classStyle += "completed";
+    }
+
+    if (isEditMode) {
+      return (
         <input
-          className="toggle"
-          type="checkbox"
-          onClick={onToggleDone}
-          defaultChecked={done}
-          id={`todo-${taskId}`}
+          autoFocus
+          className="editing"
+          value={text}
+          onChange={(e) => {
+            this.setState({
+              text: e.target.value,
+            });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              this.setState({
+                isEditMode: !isEditMode,
+              });
+            }
+          }}
         />
-        <label htmlFor={`todo-${taskId}`}>
-          <span className="description">{label}</span>
-          <span className="created">{`created ${formatDistanceToNowStrict(
-            date
-          )} ago`}</span>
-        </label>
-        <button type="button" className="icon icon-edit" />
-        <button
-          type="button"
-          className="icon icon-destroy"
-          onClick={onDeleted}
-        />
-      </div>
-    </li>
-  );
+      );
+    }
+
+    return (
+      <li className={classStyle}>
+        <div className="view">
+          <input className="toggle" type="checkbox" checked={done} onChange={onToggleDone} />
+          <label>
+            <span
+              className="description"
+              onClick={onToggleDone}
+              onKeyDown={onToggleDone}
+              role="button"
+              tabIndex="0"
+            >
+              {text}
+            </span>
+            <span className="created">{`created ${formatDistanceToNowStrict(date)} ago`}</span>
+          </label>
+          <div className="button">
+            <button type="button" className="icon icon-edit" onClick={this.onEditClick} />
+            <button type="button" className="icon icon-destroy" onClick={onDeleted} />
+          </div>
+        </div>
+      </li>
+    );
+  }
 }
 
+Task.defaultProps = {
+  onToggleDone: () => {},
+  onDeleted: () => {},
+};
+// если функция определена в самом компоненте, как onEditClick, указывать ее в PropTypes не нужно
+Task.propTypes = {
+  onToggleDone: PropTypes.func,
+  onDeleted: PropTypes.func,
+};
+
 export default Task;
-
-
-
-
-// const Task = ({ label, important = false }) => {
-//   const style = {
-//     color: important ? "steelblue" : "black",
-//     fontWeight: important ? "bold" : "normal",
-//   };
-
-// };
-
-

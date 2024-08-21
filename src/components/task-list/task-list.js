@@ -1,22 +1,22 @@
 import Task from "../task/task.js";
 import "./task-list.css";
 
-function TaskList({ todos, onDeleted, onToggleDone }) {
-  const elements = todos.map((item) => (
+function TaskList({ todos, onDeleted, onToggleDone, addItem }) {
+  const elem = todos.map((item) => (
     <Task
       key={item.id}
-      label={item.label}
-      done={item.done}
-      change={item.change}
-      date={item.date}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...item}
       onDeleted={() => {
         onDeleted(item.id);
       }}
-      onToggleDone={() => onToggleDone(item.id)}
-      taskId={item.id}
+      onToggleDone={() => {
+        onToggleDone(item.id);
+      }}
+      addItem={addItem}
     />
   ));
-  return <ul className="todo-list">{elements}</ul>;
+  return <ul className="todo-list">{elem}</ul>;
 }
 
 export default TaskList;
