@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import "./task.css";
 import PropTypes from "prop-types";
@@ -31,7 +31,7 @@ class Task extends React.Component {
     if (isEditMode) {
       return (
         <input
-          autoFocus
+          // autoFocus
           className="editing"
           value={text}
           onChange={(e) => {
@@ -53,7 +53,12 @@ class Task extends React.Component {
     return (
       <li className={classStyle}>
         <div className="view">
-          <input className="toggle" type="checkbox" checked={done} onChange={onToggleDone} />
+          <input
+            className="toggle"
+            type="checkbox"
+            checked={done}
+            onChange={onToggleDone}
+          />
           <label>
             <span
               className="description"
@@ -64,11 +69,21 @@ class Task extends React.Component {
             >
               {text}
             </span>
-            <span className="created">{`created ${formatDistanceToNowStrict(date)} ago`}</span>
+            <span className="created">{`created ${formatDistanceToNowStrict(
+              date
+            )} ago`}</span>
           </label>
           <div className="button">
-            <button type="button" className="icon icon-edit" onClick={this.onEditClick} />
-            <button type="button" className="icon icon-destroy" onClick={onDeleted} />
+            <button
+              type="button"
+              className="icon icon-edit"
+              onClick={this.onEditClick}
+            />
+            <button
+              type="button"
+              className="icon icon-destroy"
+              onClick={onDeleted}
+            />
           </div>
         </div>
       </li>

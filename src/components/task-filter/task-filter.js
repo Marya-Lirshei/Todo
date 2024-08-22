@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./task-filter.css";
+
 export default class TaskFilter extends Component {
   buttons = [
     { name: "all", label: "All" },
@@ -27,4 +28,3 @@ export default class TaskFilter extends Component {
     return <div className="filters">{buttons}</div>;
   }
 }
-

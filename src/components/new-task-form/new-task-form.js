@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import "./new-task-form.css"
+import "./new-task-form.css";
 
-
-export default class NewTaskForm extends Component{
-
+export default class NewTaskForm extends Component {
   constructor(props) {
     super(props);
 
@@ -15,15 +13,17 @@ export default class NewTaskForm extends Component{
   onSubmit = (event) => {
     event.preventDefault();
     const { addItem } = this.props;
-    addItem(this.state.label);
+    const { label } = this.state;
+    addItem(label);
     this.setState({
       label: "",
     });
   };
 
   onLableChange = (event) => {
+    const { value } = event.target;
     this.setState({
-      label: event.target.value,
+      label: value,
     });
   };
 

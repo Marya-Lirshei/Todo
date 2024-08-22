@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import { nanoid } from "nanoid";
 
 import NewTaskForm from "../new-task-form/new-task-form";
 import TaskList from "../task-list/task-list";
 import Footer from "../footer/footer";
-import { nanoid } from "nanoid";
 import "./app.css";
 // console.log("hee");
 
@@ -21,18 +21,18 @@ export default class App extends Component {
     }
   }
 
-  static createTodoItem = (label) => {
-    return {
-      label,
-      done: false,
-      edit: false,
-      id: nanoid(),
-      date: new Date(),
-    };
-  }
+  static createTodoItem = (label) => ({
+    label,
+    done: false,
+    edit: false,
+    id: nanoid(),
+    date: new Date(),
+  });
 
   static onToggleProperty(arr, id, propName) {
-    return arr.map((el) => (el.id === id ? { ...el, [propName]: !el[propName] } : el));
+    return arr.map((el) =>
+      el.id === id ? { ...el, [propName]: !el[propName] } : el
+    );
   }
 
   constructor(props) {
@@ -48,7 +48,7 @@ export default class App extends Component {
       filterState: "",
     };
   }
-  
+
   addItem = (text) => {
     if (text.trim()) {
       const obj = App.createTodoItem(text);
@@ -61,13 +61,12 @@ export default class App extends Component {
     }
   };
 
-  
   onToggleDone = (id) => {
     this.setState(({ todoData }) => ({
       todoData: App.onToggleProperty(todoData, id, "done"),
     }));
   };
-  
+
   onToggleEdit = (id) => {
     this.setState(({ todoData }) => ({
       todoData: App.onToggleProperty(todoData, id, "edit"),
@@ -87,7 +86,7 @@ export default class App extends Component {
     this.setState({ filterState });
   };
 
- clearCompleted = () => {
+  clearCompleted = () => {
     this.setState(({ todoData }) => {
       const now = todoData.filter((el) => !el.done);
       return {
@@ -100,7 +99,7 @@ export default class App extends Component {
     const { todoData, filterState } = this.state;
 
     const visibleItems = App.filterTask(todoData, filterState);
-    const leftItems  = todoData.filter((el) => !el.done).length;
+    const leftItems = todoData.filter((el) => !el.done).length;
 
     return (
       <section className="todoapp">
